@@ -1,0 +1,49 @@
+{
+	"type": "FeatureCollection",
+	"features": [
+		{ 
+			"type": "Feature",
+			"properties": {
+				"Speaker": "Peter Steps Bunny",
+				"Bio": "Wreaking havoc in the vegetable garden."
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [ 0.112888,0.231915 ]
+			} 
+		},
+		{ 
+			"type": "Feature",
+			"properties": {
+				"Speaker": "D Ironworker of the Bush",
+				"Bio": "JS Wizard"
+				},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [ -7.937279, 40.895868 ]
+			}
+		},
+		{ 
+			"type": "Feature",
+			"properties": {
+				"Speaker": "O Barqueiro",
+				"Bio": "Takes you into safe haven"
+				},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [ 5.285883,52.206555 ]
+			}
+		},
+		{ 
+			"type": "Feature",
+			"properties": {
+				"Speaker": "Fleecy little Tango",
+				"Bio": ""
+				},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [ -95.677068,37.0625 ]
+			}
+		}
+	]
+}
