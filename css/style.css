@@ -1436,3 +1436,35 @@ footer {
   margin: 100px 0 0 -15px;
   display: block;
 }
+
+/*------ twitter feed ------- */
+
+/* Twitter feed */
+.show-tweets {
+    margin: 0;
+    overflow-y: hidden;
+}
+
+.tweet_list {
+    height: 10em;
+    margin: 0;
+    padding: 0;
+    overflow-y: hidden;
+    list-style: none;
+}
+  
+.tweet_list li {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    list-style-type: none;
+    line-height: 24px;
+}
+    
+.tweet_list .tweet_avatar {
+    float: left;
+}
+    
+.tweet_list .tweet_avatar img {
+    vertical-align: middle;
+}
