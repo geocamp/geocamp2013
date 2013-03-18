@@ -200,18 +200,13 @@ header {
   color: #000000;
 }
 /*------ logo ------- */
-.navbar_ .brand_ {
-  display: block;
-  float: left;
-  font-size: 0;
-  line-height: 0;
-  padding: 12px 0 0 4px;
-  margin: 0;
+
+.navbar_ h1.brand_ {
+  color: #fff;
+  font-size: 3em;
+  /*line-height: 0;*/
 }
-.navbar_ .brand_ h1 {
-  font-size: 0;
-  line-height: 0;
-}
+
 /*------ h1, h2, h3, h4, h5, h6 ------- */
 h1,
 h2,
