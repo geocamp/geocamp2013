@@ -110,6 +110,7 @@
           <div class="row">
         <article class="span12">
           <h4>Speakers</h4>
+            <a href="#" class="map-control">play</a>
           <div id="map-wrapper">
             <div id="map">
             </div>
@@ -137,24 +138,70 @@
                 ' Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.');
             m.ui.zoomer.add();
             m.ui.zoombox.add();
-            m.zoom(8).center({ lat: 37.6, lon: -7.6 });;
+            m.zoom(8).center({ lat: 37.6, lon: -7.6 });
             
             
-            function ignorePopups(markers) {
-              var clean = [];
-              for (var i = 0; i < markers.length; i++) {
-                if (markers[i].showTooltip) clean.push(markers[i]);
+            
+            var looper = {
+              $self : null,
+              _counter : 0,
+              _time : 5000,
+              _loop : null,
+              _running : false,
+              
+              init : function(){
+                $self = this;
+                $('.map-control').click(function() {
+                  if ($self._running) {
+                    $self.stop();
+                  }
+                  else {
+                    $self.start();
+                  }
+                  return false;
+                });
+                
+                m.addCallback("panned", function(map, panOffset) {
+                  looper.stop();
+                });
+                
+                m.addCallback("zoomed", function(map, zoomOffset) {
+                  looper.stop();
+                });
+              },
+              
+              // Removes all the non markers values.
+              _ignorePopups : function(markers) {
+                var clean = [];
+                for (var i = 0; i < markers.length; i++) {
+                  if (markers[i].showTooltip) clean.push(markers[i]);
+                }
+                return clean;
+              },
+              
+              _marker_looper : function(){
+                var markers = $self._ignorePopups(markerLayer.markers());
+                if (++$self._counter > markers.length - 1) {
+                  $self._counter = 0;
+                }
+                
+                m.center(markers[$self._counter].location, true);
+                markers[$self._counter].showTooltip();
+              },
+              
+              start : function(){
+                $self = this;
+                $self._marker_looper();
+                $self._running = true;
+                $self._loop = setInterval($self._marker_looper, $self._time);
+                $('.map-control').removeClass('map-paused').addClass('map-running').text('pause');
+              },
+              
+              stop : function(){
+                clearInterval($self._loop);
+                $self._running = false;
+                $('.map-control').removeClass('map-running').addClass('map-paused').text('play');
               }
-              return clean;
-            }
-
-            var i = 0;
-            var map_looper = function(){
-              var markers = ignorePopups(markerLayer.markers());
-              if (++i > markers.length - 1) i = 0;
-              m.center(markers[i].location, true);
-              markers[i].showTooltip();
-              setTimeout(map_looper, 5000);
             };
             
             
@@ -204,7 +251,8 @@
           jQuery(this).css('display', 'none');
         });
         
-        map_looper();
+        looper.init();
+        looper.start();
 
       });
 
