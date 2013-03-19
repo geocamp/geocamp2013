@@ -110,9 +110,11 @@
           <div class="row">
         <article class="span12">
           <h4>Speakers</h4>
-            <a href="#" class="map-control">play</a>
           <div id="map-wrapper">
             <div id="map">
+            </div>
+            <div id='map-ui'>
+              <a id="map-control" class="map-control" href='#'>play</a>
             </div>
             <script>
             var m = mapbox.map('map');
@@ -126,9 +128,17 @@
             var interaction = mapbox.markers.interaction(markerLayer);
             
             interaction.formatter(function(feature){
-              var data = '<h1>' + feature.properties.Speaker + '</h1><div>' + feature.properties.Bio + '</div>';
+              var data = '<h3>' + feature.properties.Speaker + '</h3>';
+              data += '<div class="clearfix">';
+              data += '<img src="' + feature.properties.Photo + '" class="author-image"" alt="Speaker photo"/>';
+              data += '<div class="author-bio">' + feature.properties.Bio + '</div>';
+              data += '</div>';
               return data;
             });
+            
+            // Determine whether tooltips are hidden when the map is moved.
+            interaction.hideOnMove(false);
+            interaction.showOnHover(false);
             
             m.addLayer(markerLayer);
             
@@ -148,9 +158,13 @@
               _time : 5000,
               _loop : null,
               _running : false,
+              _markers : null,
               
               init : function(){
                 $self = this;
+                
+                $self._markers = $self._ignorePopups(markerLayer.markers());
+                
                 $('.map-control').click(function() {
                   if ($self._running) {
                     $self.stop();
@@ -180,17 +194,15 @@
               },
               
               _marker_looper : function(){
-                var markers = $self._ignorePopups(markerLayer.markers());
-                if (++$self._counter > markers.length - 1) {
+                if (++$self._counter > $self._markers.length - 1) {
                   $self._counter = 0;
                 }
                 
-                m.center(markers[$self._counter].location, true);
-                markers[$self._counter].showTooltip();
+                m.center($self._markers[$self._counter].location, true);
+                $self._markers[$self._counter].showTooltip();
               },
               
               start : function(){
-                $self = this;
                 $self._marker_looper();
                 $self._running = true;
                 $self._loop = setInterval($self._marker_looper, $self._time);

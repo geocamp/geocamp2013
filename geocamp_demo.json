@@ -5,7 +5,8 @@
 			"type": "Feature",
 			"properties": {
 				"Speaker": "Peter Steps Bunny",
-				"Bio": "Wreaking havoc in the vegetable garden."
+				"Bio": "Wreaking havoc in the vegetable garden.",
+				"Photo": "http://lorempixel.com/80/80/"
 			},
 			"geometry": {
 				"type": "Point",
@@ -16,7 +17,8 @@
 			"type": "Feature",
 			"properties": {
 				"Speaker": "D Ironworker of the Bush",
-				"Bio": "JS Wizard"
+				"Bio": "JS Wizard",
+        "Photo": "http://lorempixel.com/80/80/"
 				},
 			"geometry": {
 				"type": "Point",
@@ -27,7 +29,8 @@
 			"type": "Feature",
 			"properties": {
 				"Speaker": "O Barqueiro",
-				"Bio": "Takes you into safe haven"
+				"Bio": "Takes you into safe haven",
+        "Photo": "http://lorempixel.com/80/80/"
 				},
 			"geometry": {
 				"type": "Point",
@@ -38,7 +41,8 @@
 			"type": "Feature",
 			"properties": {
 				"Speaker": "Fleecy little Tango",
-				"Bio": ""
+				"Bio": "",
+        "Photo": "http://lorempixel.com/80/80/"
 				},
 			"geometry": {
 				"type": "Point",
