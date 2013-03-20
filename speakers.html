@@ -122,7 +122,8 @@
             // full Modest Maps API. Stamen also has a JavaScript
             // snippet you can add to add their layers quickly:
             // http://maps.stamen.com/
-            m.addLayer(new MM.TemplatedLayer('http://c.tile.stamen.com/toner/{Z}/{X}/{Y}.png'));
+            //m.addLayer(new MM.TemplatedLayer('http://c.tile.stamen.com/toner/{Z}/{X}/{Y}.png'));
+            m.addLayer(new MM.TemplatedLayer('http://a.tiles.mapbox.com/v3/mapbox.natural-earth-hypso/{Z}/{X}/{Y}.png'));
             
             var markerLayer = mapbox.markers.layer().url('geocamp_demo.json');
             var interaction = mapbox.markers.interaction(markerLayer);
@@ -141,6 +142,7 @@
             interaction.showOnHover(false);
             
             m.addLayer(markerLayer);
+            m.setZoomRange(1, 6);
             
             m.ui.attribution.add()
                 .content('Map tiles by <a href="http://stamen.com">Stamen Design</a>, under' +
