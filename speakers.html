@@ -113,23 +113,36 @@
           <div id="map-wrapper">
             <div id="map">
             </div>
+            <div id='map-ui'>
+              <a id="map-control" class="map-control" href='#'>play</a>
+            </div>
             <script>
             var m = mapbox.map('map');
             // It's simple to add non-MapBox Layers by using the
             // full Modest Maps API. Stamen also has a JavaScript
             // snippet you can add to add their layers quickly:
             // http://maps.stamen.com/
+            //m.addLayer(new MM.TemplatedLayer('http://c.tile.stamen.com/toner/{Z}/{X}/{Y}.png'));
             m.addLayer(new MM.TemplatedLayer('http://c.tile.stamen.com/toner/{Z}/{X}/{Y}.png'));
             
             var markerLayer = mapbox.markers.layer().url('geocamp_demo.json');
             var interaction = mapbox.markers.interaction(markerLayer);
             
             interaction.formatter(function(feature){
-              var data = '<h1>' + feature.properties.Speaker + '</h1><div>' + feature.properties.Bio + '</div>';
+              var data = '<h3>' + feature.properties.Speaker + '</h3>';
+              data += '<div class="clearfix">';
+              data += '<img src="' + feature.properties.Photo + '" class="author-image"" alt="Speaker photo"/>';
+              data += '<div class="author-bio">' + feature.properties.Bio + '</div>';
+              data += '</div>';
               return data;
             });
             
+            // Determine whether tooltips are hidden when the map is moved.
+            interaction.hideOnMove(false);
+            interaction.showOnHover(false);
+            
             m.addLayer(markerLayer);
+            m.setZoomRange(1, 6);
             
             m.ui.attribution.add()
                 .content('Map tiles by <a href="http://stamen.com">Stamen Design</a>, under' +
@@ -137,24 +150,72 @@
                 ' Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.');
             m.ui.zoomer.add();
             m.ui.zoombox.add();
-            m.zoom(8).center({ lat: 37.6, lon: -7.6 });;
+            m.zoom(8).center({ lat: 37.6, lon: -7.6 });
             
             
-            function ignorePopups(markers) {
-              var clean = [];
-              for (var i = 0; i < markers.length; i++) {
-                if (markers[i].showTooltip) clean.push(markers[i]);
+            
+            var looper = {
+              $self : null,
+              _counter : 0,
+              _time : 5000,
+              _loop : null,
+              _running : false,
+              _markers : null,
+              
+              init : function(){
+                $self = this;
+                
+                $self._markers = $self._ignorePopups(markerLayer.markers());
+                
+                $('.map-control').click(function() {
+                  if ($self._running) {
+                    $self.stop();
+                  }
+                  else {
+                    $self.start();
+                  }
+                  return false;
+                });
+                
+                m.addCallback("panned", function(map, panOffset) {
+                  looper.stop();
+                });
+                
+                m.addCallback("zoomed", function(map, zoomOffset) {
+                  looper.stop();
+                });
+              },
+              
+              // Removes all the non markers values.
+              _ignorePopups : function(markers) {
+                var clean = [];
+                for (var i = 0; i < markers.length; i++) {
+                  if (markers[i].showTooltip) clean.push(markers[i]);
+                }
+                return clean;
+              },
+              
+              _marker_looper : function(){
+                if (++$self._counter > $self._markers.length - 1) {
+                  $self._counter = 0;
+                }
+                
+                m.center($self._markers[$self._counter].location, true);
+                $self._markers[$self._counter].showTooltip();
+              },
+              
+              start : function(){
+                $self._marker_looper();
+                $self._running = true;
+                $self._loop = setInterval($self._marker_looper, $self._time);
+                $('.map-control').removeClass('map-paused').addClass('map-running').text('pause');
+              },
+              
+              stop : function(){
+                clearInterval($self._loop);
+                $self._running = false;
+                $('.map-control').removeClass('map-running').addClass('map-paused').text('play');
               }
-              return clean;
-            }
-
-            var i = 0;
-            var map_looper = function(){
-              var markers = ignorePopups(markerLayer.markers());
-              if (++i > markers.length - 1) i = 0;
-              m.center(markers[i].location, true);
-              markers[i].showTooltip();
-              setTimeout(map_looper, 5000);
             };
             
             
@@ -204,7 +265,8 @@
           jQuery(this).css('display', 'none');
         });
         
-        map_looper();
+        looper.init();
+        looper.start();
 
       });
 
