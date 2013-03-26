@@ -1308,8 +1308,8 @@ footer {
 .ri-grid ul {
   list-style: none;
   display: block;
-  width: 100%;
-  margin: 0;
+  width: 115%;
+  margin: 0 0 0 -50px;
   padding: 0;
 }
 
